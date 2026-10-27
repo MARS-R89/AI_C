@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChatGPT Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-top">
+        <button id="newChat" class="new-chat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          New chat
+        </button>
+        <button id="closeSidebar" class="icon-btn mobile-only" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="history-label">Chats</div>
+      <nav id="history" class="history"></nav>
+      <div class="sidebar-bottom">
+        <button id="openSettings" class="side-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+          Settings &amp; API key
+        </button>
+      </div>
+    </aside>
+    <div id="overlay" class="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="openSidebar" class="icon-btn mobile-only" aria-label="Open sidebar">☰</button>
+        <div class="model-pill"><span id="modelLabel">gpt-4o-mini</span></div>
+      </header>
+
+      <div id="chat" class="chat">
+        <div id="welcome" class="welcome">
+          <h1>What can I help with?</h1>
+          <div class="chips">
+            <button class="chip" data-prompt="Explain how the internet works in simple terms">Explain the internet</button>
+            <button class="chip" data-prompt="Write a short Python script that renames all files in a folder">Write a Python script</button>
+            <button class="chip" data-prompt="Give me a 3-day workout plan for beginners">Workout plan</button>
+            <button class="chip" data-prompt="Help me write a polite email asking for a deadline extension">Draft an email</button>
+          </div>
+        </div>
+        <div id="messages" class="messages"></div>
+      </div>
+
+      <div class="composer-wrap">
+        <form id="composer" class="composer">
+          <textarea id="input" rows="1" placeholder="Message ChatGPT" autofocus></textarea>
+          <button id="send" type="submit" class="send-btn" aria-label="Send">
+            <svg id="iconSend" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+            <svg id="iconStop" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+          </button>
+        </form>
+        <p class="disclaimer">Your API key stays in this browser and is only sent to api.openai.com. Responses may be inaccurate.</p>
+      </div>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <h2 id="settingsTitle">Settings</h2>
+        <button id="closeSettings" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <p id="modalNotice" class="notice hidden"></p>
+
+      <label for="apiKey">OpenAI API key</label>
+      <div class="key-row">
+        <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false">
+        <button id="toggleKey" type="button" class="ghost-btn">Show</button>
+      </div>
+      <small>Get one at platform.openai.com/api-keys. It is saved only in your browser's localStorage.</small>
+
+      <label for="model">Model</label>
+      <input id="model" list="models" placeholder="gpt-4o-mini" autocomplete="off">
+      <datalist id="models">
+        <option value="gpt-4o-mini"></option>
+        <option value="gpt-4o"></option>
+        <option value="gpt-4.1"></option>
+        <option value="gpt-4.1-mini"></option>
+        <option value="gpt-4.1-nano"></option>
+        <option value="gpt-4-turbo"></option>
+        <option value="gpt-3.5-turbo"></option>
+      </datalist>
+      <small>Pick one or type any model name your key has access to.</small>
+
+      <label for="system">System prompt</label>
+      <textarea id="system" rows="3" placeholder="You are a helpful assistant."></textarea>
+
+      <label for="theme">Theme</label>
+      <select id="theme">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
+
+      <div class="modal-actions">
+        <button id="clearAll" type="button" class="danger-btn">Delete all chats</button>
+        <button id="saveSettings" type="button" class="primary-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
